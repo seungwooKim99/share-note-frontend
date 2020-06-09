@@ -6,6 +6,15 @@ export const LOCAL_LOG_IN = gql`
     }
 `;
 
+export const LOG_IN = gql`
+    mutation generateToken($email: String! $password: String!){
+        generateToken(
+            email: $email
+            password: $password
+        )
+    }
+`;
+
 export const SEND_SECRET = gql`
     mutation sendSecret($email: String!){
         sendSecret(email: $email)

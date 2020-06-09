@@ -1,17 +1,24 @@
 import AuthPresenter from "./AuthPresenter";
 import React, { useState } from "react";
 import { useMutation, useQuery } from "react-apollo-hooks";
-import { LOCAL_LOG_IN, CREATE_ACCOUNT, SEND_SECRET, EMAIL_EXISTS } from "./AuthQueries";
+import { LOCAL_LOG_IN, CREATE_ACCOUNT, SEND_SECRET, EMAIL_EXISTS, LOG_IN } from "./AuthQueries";
 import useInput from "../../Hooks/useInput";
 import { toast } from "react-toastify";
 
 export default () => {
-    const [action, setAction] = useState("signUp");
+    const [action, setAction] = useState("logIn");
     const [secretKey, setSecretKey] = useState("");
     const name = useInput("");
     const email = useInput("");
     const password = useInput("");
     const secretInput = useInput("");
+
+    const [generateTokenMutation] = useMutation(LOG_IN, {
+        variables: {
+            email: email.value,
+            password: password.value
+        }
+    });
 
     const [sendSecretMutation] = useMutation(SEND_SECRET, {
         variables: {
@@ -28,10 +35,25 @@ export default () => {
 
     const [isExistsMutation] = useMutation(EMAIL_EXISTS, { variables: { email: email.value } });
 
+    const [localLogInMutation] = useMutation(LOCAL_LOG_IN);
+
     const onSubmit = async (e) => {
         e.preventDefault();
         if (action === "logIn") {
-
+            if (email.value !== "" && password.value !== "") {
+                try {
+                    const { data: { generateToken: token } } = await generateTokenMutation();
+                    if (token !== "" && token !== undefined) {
+                        localLogInMutation({ variables: { token } });
+                    }
+                    else {
+                        throw Error();
+                    }
+                }
+                catch{
+                    toast.error("로그인 할 수 없습니다.")
+                }
+            }
         }
         else if (action === "signUp") {
             if (

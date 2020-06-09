@@ -60,9 +60,11 @@ export default ({
         <Wrapper>
             <Form>
                 {action === "logIn" && (
-                    <div>
-                        로그인창
-                    </div>
+                    <form onSubmit={onSubmit}>
+                        <Input placeholder={"이메일"} {...email} type="email" />
+                        <Input placeholder={"비밀번호"} required {...password} type="password" />
+                        <Button text={"로그인"} />
+                    </form>
                 )}
                 {action === "signUp" && (
                     <>
