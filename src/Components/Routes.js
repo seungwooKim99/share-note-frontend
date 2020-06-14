@@ -5,12 +5,14 @@ import SharedFeed from "../Routes/SharedFeed";
 import MyNotes from "../Routes/MyNotes";
 import Profile from "../Routes/Profile";
 import Auth from "../Routes/Auth";
+import MakeMatch from "../Routes/MakeMatch";
 
 const LoggedInRoutes = () => (
     <Switch>
-        <Route exact path="/" component={SharedFeed} />
+        <Route exact path="/" component={MakeMatch} />
+        <Route path="/sharedfeed" component={SharedFeed} />
         <Route path="/mynotes" component={MyNotes} />
-        <Route path="/:username" component={Profile} />
+        <Route path="/profile" component={Profile} />
         <Redirect from="*" to="/" />
     </Switch>
 );
@@ -23,7 +25,7 @@ const LoggedOutRoutes = () => (
 );
 
 const AppRouter = ({ isLoggedIn }) => (
-    isLoggedIn ? <LoggedInRoutes /> : <LoggedOutRoutes />
+    !isLoggedIn ? <LoggedOutRoutes /> : <LoggedInRoutes />
 );
 
 AppRouter.propTypes = {
