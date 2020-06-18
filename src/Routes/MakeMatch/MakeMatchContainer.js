@@ -16,10 +16,15 @@ const ME = gql`
 export default () => {
     const { data, loading } = useQuery(ME);
 
+    const onSubmit = async (e) => {
+
+    };
+
     return (
         <MakeMatchPresenter
             data={data}
             loading={loading}
+            onSubmit={onSubmit}
         />
     )
 };
