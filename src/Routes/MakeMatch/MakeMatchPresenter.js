@@ -35,8 +35,11 @@ const Form = styled(Box)`
 `;
 
 export default ({
+    action,
     data,
     loading,
+    searchData,
+    searchLoading,
     onSubmit
 }) => {
 
@@ -54,19 +57,27 @@ export default ({
                 isMatched
             }
         } = data;
+
         if (!isMatched) {
             return (
                 <Wrapper>
                     <Form>
-                        <form onSubmit={onSubmit}>
-                            <Input placeholder={"이메일"} type="email" />
-                            <Button text={"검색"} />
-                        </form>
+                        {action === "showResult" && (
+                            <div>
+                                show result
+                            </div>
+                        )}
+                        {action === "search" || "showResult" && (
+                            <form onSubmit={onSubmit}>
+                                <Input placeholder={"이메일"} type="email" />
+                                <Button text={"검색"} />
+                            </form>
+                        )}
                     </Form>
                 </Wrapper>
             )
         }
-        else {
+        else if (isMatched) {
 
         }
     }
