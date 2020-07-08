@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
-
+import Helmet from "react-helmet";
 
 
 const Wrapper = styled.div`
@@ -38,9 +38,10 @@ export default ({
     action,
     data,
     loading,
-    searchData,
-    searchLoading,
-    onSubmit
+    onSubmit,
+    searchemail,
+    search,
+    searchLoading
 }) => {
 
     if (loading) {
@@ -62,22 +63,20 @@ export default ({
             return (
                 <Wrapper>
                     <Form>
-                        {action === "showResult" && (
-                            <div>
-                                show result
-                            </div>
-                        )}
-                        {action === "search" || "showResult" && (
-                            <form onSubmit={onSubmit}>
-                                <Input placeholder={"이메일"} type="email" />
-                                <Button text={"검색"} />
-                            </form>
-                        )}
+                        <form onSubmit={onSubmit}>
+                            <Input placeholder={"이메일로 검색하세요"} {...searchemail} type="email" />
+                            <Button text={"검색"} />
+                        </form>
                     </Form>
-                </Wrapper>
-            )
+                    {!searchLoading && data && data.searchUser && (
+                        <div>
+                            {data.email}
+                        </div>
+                    )}
+                </Wrapper >
+            );
         }
-        else if (isMatched) {
+        else {
 
         }
     }

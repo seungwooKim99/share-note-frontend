@@ -3,6 +3,7 @@ import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
 import MakeMatchPresenter from "./MakeMatchPresenter";
 import useInput from "../../Hooks/useInput";
+import { toast } from "react-toastify";
 
 const ME = gql`
     query me{
@@ -19,7 +20,6 @@ const SEARCH = gql`
         searchUser(email: $email){
             id
             email
-            name
         }
     }
 `;
@@ -29,31 +29,27 @@ export default () => {
     const [action, setAction] = useState("search");
 
     const { data, loading } = useQuery(ME);
-    const { searchData, searchLoading } = useQuery(SEARCH, {
-        skip: searchemail.value === '',
+    const { data: search, loading: searchLoading } = useQuery(SEARCH, {
         variables: {
             email: searchemail.value
-        }
+        },
+        suspend: false
     })
-    const onSubmit = async (e) => {
-        //e.preventDefault();
-        if (action === "search") {
-            if (searchemail.value !== "") {
-                console.log(searchData);
 
-            }
-        }
-        console.log(searchData);
-    };
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        console.log(search);
+    }
 
     return (
         <MakeMatchPresenter
             action={action}
             data={data}
             loading={loading}
-            searchData={searchData}
-            searchLoading={searchLoading}
             onSubmit={onSubmit}
+            searchemail={searchemail}
+            search={search}
+            searchLoading={searchLoading}
         />
     )
 };
