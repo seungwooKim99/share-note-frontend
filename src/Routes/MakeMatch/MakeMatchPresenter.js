@@ -63,14 +63,16 @@ export default ({
             return (
                 <Wrapper>
                     <Form>
-                        <form onSubmit={onSubmit}>
-                            <Input placeholder={"이메일로 검색하세요"} {...searchemail} type="email" />
-                            <Button text={"검색"} />
-                        </form>
+                        <Input placeholder={"이메일로 검색하세요"} {...searchemail} type="email" />
                     </Form>
-                    {!searchLoading && data && data.searchUser && (
+                    {searchLoading && (
                         <div>
-                            {data.email}
+                            Loading
+                        </div>
+                    )}
+                    {!searchLoading && search && search.searchUser && (
+                        <div>
+                            {search.searchUser.email}
                         </div>
                     )}
                 </Wrapper >
