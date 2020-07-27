@@ -44,7 +44,7 @@ export default () => {
                 try {
                     const { data: { generateToken: token } } = await generateTokenMutation();
                     if (token !== "" && token !== undefined) {
-                        localLogInMutation({ variables: { token } });
+                        await localLogInMutation({ variables: { token } });
                     }
                     else {
                         throw Error();

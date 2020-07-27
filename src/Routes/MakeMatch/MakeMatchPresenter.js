@@ -3,7 +3,9 @@ import styled from "styled-components";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import Helmet from "react-helmet";
-
+import UserCard from "../../Components/UserCard";
+import FatText from "../../Components/FatText";
+import Loader from "../../Components/Loader";
 
 const Wrapper = styled.div`
     min-height: 80vh;
@@ -14,44 +16,52 @@ const Wrapper = styled.div`
 `;
 
 const Box = styled.div`
-    ${props => props.theme.whiteBox}
+    ${props => props.theme.defaultBox}
     width: 100%;
-    max-width: 400px;
+    max-width: 360px;
 `;
 
 const Form = styled(Box)`
     padding: 40px;
-    padding-bottom: 30px;
-    margin-bottom: 15px;
-    form{
+    padding-bottom: 20px;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    span{
+        padding-bottom: 10px;
+    }
+    input{
         width: 100%;
-        input{
-            width: 100%;
-        }
-        button {
-            margin-top: 10px;
-        }
+    }
+    button{
+        margin: 10px 0px 10px;
     }
 `;
 
 export default ({
-    action,
     data,
     loading,
-    onSubmit,
     searchemail,
     search,
-    searchLoading
+    searchLoading,
+    onSubmit,
+    userData
 }) => {
-
-    if (loading) {
+    if (loading === true) {
         return (
             <Wrapper>
-                Loading
+                <Loader />
             </Wrapper>
         )
     }
-    else if (!loading && data && data.me) {
+    else if (data == undefined) {
+        return (
+            <Wrapper>
+                <Loader />
+            </Wrapper>
+        )
+    }
+    else if (data && data.me) {
         const {
             me: {
                 email,
@@ -63,23 +73,29 @@ export default ({
             return (
                 <Wrapper>
                     <Form>
-                        <Input placeholder={"이메일로 검색하세요"} {...searchemail} type="email" />
+                        <form onSubmit={onSubmit}>
+                            <Input placeholder={"이메일로 검색하세요"} {...searchemail} type="email" />
+                            <Button text={"검색"} />
+                        </form>
+                        {userData && (
+                            <>
+                                <UserCard
+                                    key={userData.id}
+                                    id={userData.id}
+                                    name={userData.name}
+                                    email={userData.email}
+                                />
+                            </>
+                        )}
                     </Form>
-                    {searchLoading && (
-                        <div>
-                            Loading
-                        </div>
-                    )}
-                    {!searchLoading && search && search.searchUser && (
-                        <div>
-                            {search.searchUser.email}
-                        </div>
-                    )}
                 </Wrapper >
             );
         }
         else {
-
+            return null;
         }
+    }
+    else {
+        return null;
     }
 };

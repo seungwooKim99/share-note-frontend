@@ -19,13 +19,13 @@ const LoggedInRoutes = () => (
 
 const LoggedOutRoutes = () => (
     <Switch>
-        <Route exact path="/" component={Auth} />
-        <Redirect from="*" to="/" />
+        <Route exact path="/Auth" component={Auth} />
+        <Redirect from="*" to="/Auth" />
     </Switch>
 );
 
 const AppRouter = ({ isLoggedIn }) => (
-    !isLoggedIn ? <LoggedOutRoutes /> : <LoggedInRoutes />
+    isLoggedIn ? <LoggedInRoutes /> : <LoggedOutRoutes />
 );
 
 AppRouter.propTypes = {

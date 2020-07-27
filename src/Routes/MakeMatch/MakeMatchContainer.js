@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { gql } from "apollo-boost";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery, useMutation } from "react-apollo-hooks";
 import MakeMatchPresenter from "./MakeMatchPresenter";
 import useInput from "../../Hooks/useInput";
 import { toast } from "react-toastify";
+
 
 const ME = gql`
     query me{
@@ -16,40 +17,40 @@ const ME = gql`
 `;
 
 const SEARCH = gql`
-    query searchUser($email: String!){
+    mutation searchUser($email: String!){
         searchUser(email: $email){
             id
             email
+            name
         }
     }
 `;
 
 export default () => {
     const searchemail = useInput("");
-    const [action, setAction] = useState("search");
+    const [userData, setUserData] = useState(null);
 
     const { data, loading } = useQuery(ME);
-    const { data: search, loading: searchLoading } = useQuery(SEARCH, {
+    const [searchUserMutation] = useMutation(SEARCH, {
         variables: {
             email: searchemail.value
-        },
-        suspend: false
-    })
+        }
+    });
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        console.log(search);
+        const { data: { searchUser } } = await searchUserMutation();
+        console.log(searchUser);
+        setUserData(searchUser);
     }
 
     return (
         <MakeMatchPresenter
-            action={action}
             data={data}
             loading={loading}
-            onSubmit={onSubmit}
             searchemail={searchemail}
-            search={search}
-            searchLoading={searchLoading}
+            onSubmit={onSubmit}
+            userData={userData}
         />
     )
 };
